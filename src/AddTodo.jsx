@@ -1,28 +1,20 @@
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { useRef } from 'react';
-import { toast } from 'react-toastify';
-function AddTodo({handleAddTodo}) {
+import React, { useContext, useRef } from 'react'
+import { todosContext } from './TodosStore'
 
-    const referance=useRef()
-    function add(){
-        handleAddTodo(referance.current.value)
-      
-    }
+
+function AddTodo() {
+    const inputRef=useRef()
+    const [todos,setTodos]=useContext(todosContext)
   return (
-    <div style={{width:"70%",margin:"auto"}}>
-    <Form.Label htmlFor="inputPassword5">todo</Form.Label>
-    <Form.Control
-      type="text"
-    ref={referance}
-    />
-    <Form.Text id="passwordHelpBlock" muted>
-      Your password must be 8-20 characters long, contain letters and numbers,
-      and must not contain spaces, special characters, or emoji.
-    </Form.Text>
-
-    <Button onClick={add}>add todo</Button>
-  </div>
+    <div>
+        <input type="text" ref={inputRef} />
+        <button onClick={()=>{
+            fetch("http://localhost:3000/todos",{method:"post",body:JSON.stringify({todo:inputRef.current.value})})
+            .then((res)=>res.json())
+            .then(res=>  setTodos([...todos,res]))
+            inputRef.current.value=""
+        }}>submit</button>
+    </div>
   )
 }
 

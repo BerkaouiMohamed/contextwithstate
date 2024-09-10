@@ -1,1 +1,0 @@
-export const toastValidation= { pending: "loading", success: "success", error: "error" }
